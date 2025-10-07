@@ -106,6 +106,59 @@
             padding: 3rem 2rem;
         }
 
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--k8s-blue);
+            color: white;
+            border-color: var(--k8s-blue);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--k8s-blue);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
         .blog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -118,13 +171,14 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.3s, border-color 0.3s;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
 
         .blog-card:hover {
             transform: translateY(-5px);
             border-color: var(--k8s-blue);
+            box-shadow: 0 8px 30px rgba(50, 108, 229, 0.2);
         }
 
         .blog-card-image {
@@ -135,6 +189,24 @@
             align-items: center;
             justify-content: center;
             font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .blog-card:hover .blog-card-image::before {
+            left: 100%;
         }
 
         .blog-card-content {
@@ -147,12 +219,18 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .blog-card h3 {
             font-size: 1.4rem;
             margin-bottom: 0.75rem;
             color: var(--text-primary);
+            transition: color 0.3s;
+        }
+
+        .blog-card:hover h3 {
+            color: var(--k8s-blue);
         }
 
         .blog-card p {
@@ -174,36 +252,65 @@
             border-radius: 20px;
             font-size: 0.85rem;
             border: 1px solid rgba(50, 108, 229, 0.3);
+            transition: all 0.3s;
         }
 
-        .cta-section {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin: 3rem 0;
+        .tag:hover {
+            background: rgba(50, 108, 229, 0.2);
+            transform: scale(1.05);
         }
 
-        .cta-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--k8s-blue);
-        }
-
-        .cta-button {
+        .read-more {
             display: inline-block;
-            background: var(--k8s-blue);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
             margin-top: 1rem;
-            transition: background 0.3s;
+            color: var(--k8s-blue);
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s;
         }
 
-        .cta-button:hover {
-            background: #2557c7;
+        .read-more:hover {
+            transform: translateX(5px);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .pagination button {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--k8s-blue);
+            border-color: var(--k8s-blue);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
         }
 
         footer {
@@ -212,6 +319,7 @@
             padding: 2rem;
             text-align: center;
             color: var(--text-secondary);
+            margin-top: 4rem;
         }
 
         .footer-links {
@@ -224,6 +332,7 @@
         .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
+            transition: color 0.3s;
         }
 
         .footer-links a:hover {
@@ -241,6 +350,14 @@
 
             nav {
                 gap: 1rem;
+            }
+
+            .filter-section {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
             }
         }
     </style>
@@ -271,115 +388,22 @@
     <div class="container">
         <h2 style="font-size: 2rem; margin-bottom: 1rem;">Latest Articles</h2>
         
-        <div class="blog-grid">
-            <div class="blog-card">
-                <div class="blog-card-image">☸️</div>
-                <div class="blog-card-content">
-                    <div class="blog-meta">
-                        <span>📅 Oct 5, 2025</span>
-                        <span>⏱️ 8 min read</span>
-                    </div>
-                    <h3>Getting Started with Kubernetes 1.30</h3>
-                    <p>Explore the latest features and improvements in Kubernetes 1.30, including enhanced security features and performance optimizations.</p>
-                    <div class="tags">
-                        <span class="tag">Kubernetes</span>
-                        <span class="tag">Tutorial</span>
-                        <span class="tag">DevOps</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="blog-card">
-                <div class="blog-card-image">🔧</div>
-                <div class="blog-card-content">
-                    <div class="blog-meta">
-                        <span>📅 Oct 1, 2025</span>
-                        <span>⏱️ 12 min read</span>
-                    </div>
-                    <h3>Deep Dive into Service Mesh with Istio</h3>
-                    <p>Understanding how service meshes work and implementing Istio for advanced traffic management and observability in your cluster.</p>
-                    <div class="tags">
-                        <span class="tag">Istio</span>
-                        <span class="tag">Service Mesh</span>
-                        <span class="tag">CNCF</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="blog-card">
-                <div class="blog-card-image">🚀</div>
-                <div class="blog-card-content">
-                    <div class="blog-meta">
-                        <span>📅 Sep 28, 2025</span>
-                        <span>⏱️ 10 min read</span>
-                    </div>
-                    <h3>CI/CD with ArgoCD and GitOps</h3>
-                    <p>Implementing GitOps practices with ArgoCD for declarative, version-controlled Kubernetes deployments.</p>
-                    <div class="tags">
-                        <span class="tag">GitOps</span>
-                        <span class="tag">ArgoCD</span>
-                        <span class="tag">CI/CD</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="blog-card">
-                <div class="blog-card-image">📊</div>
-                <div class="blog-card-content">
-                    <div class="blog-meta">
-                        <span>📅 Sep 25, 2025</span>
-                        <span>⏱️ 15 min read</span>
-                    </div>
-                    <h3>Monitoring K8s with Prometheus & Grafana</h3>
-                    <p>Build a complete observability stack for your Kubernetes clusters using Prometheus for metrics and Grafana for visualization.</p>
-                    <div class="tags">
-                        <span class="tag">Monitoring</span>
-                        <span class="tag">Prometheus</span>
-                        <span class="tag">Observability</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="blog-card">
-                <div class="blog-card-image">🔐</div>
-                <div class="blog-card-content">
-                    <div class="blog-meta">
-                        <span>📅 Sep 20, 2025</span>
-                        <span>⏱️ 11 min read</span>
-                    </div>
-                    <h3>Kubernetes Security Best Practices</h3>
-                    <p>Essential security practices for hardening your Kubernetes clusters, from RBAC to network policies and beyond.</p>
-                    <div class="tags">
-                        <span class="tag">Security</span>
-                        <span class="tag">Best Practices</span>
-                        <span class="tag">RBAC</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="blog-card">
-                <div class="blog-card-image">🌐</div>
-                <div class="blog-card-content">
-                    <div class="blog-meta">
-                        <span>📅 Sep 15, 2025</span>
-                        <span>⏱️ 9 min read</span>
-                    </div>
-                    <h3>CNCF Landscape: Tools You Should Know</h3>
-                    <p>Navigate the vast CNCF landscape and discover essential tools for building modern cloud-native applications.</p>
-                    <div class="tags">
-                        <span class="tag">CNCF</span>
-                        <span class="tag">Cloud Native</span>
-                        <span class="tag">Overview</span>
-                    </div>
-                </div>
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all">All Posts</button>
+            <button class="filter-btn" data-filter="kubernetes">Kubernetes</button>
+            <button class="filter-btn" data-filter="security">Security</button>
+            <button class="filter-btn" data-filter="tutorial">Tutorial</button>
+            <button class="filter-btn" data-filter="cncf">CNCF</button>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search articles...">
             </div>
         </div>
 
-        <div class="cta-section">
-            <h2>Stay Updated</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Subscribe to get the latest Kubernetes and CNCF insights delivered to your inbox</p>
-            <a href="#subscribe" class="cta-button">Subscribe to Newsletter</a>
-        </div>
+        <div class="blog-grid" id="blogGrid"></div>
+        <div class="no-results" id="noResults" style="display: none;">No articles found matching your search.</div>
+
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <footer>
@@ -391,5 +415,207 @@
         </div>
         <p>&copy; 2025 BitK8s.info - All rights reserved</p>
     </footer>
+
+    <script>
+        // Blog posts data - ADD YOUR NEW POSTS HERE
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Getting Started with Kubernetes 1.30",
+                excerpt: "Explore the latest features and improvements in Kubernetes 1.30, including enhanced security features and performance optimizations.",
+                date: "2025-10-05",
+                readTime: "8 min read",
+                icon: "☸️",
+                tags: ["kubernetes", "tutorial", "devops"],
+                url: "blog/post-1.html"
+            },
+            {
+                id: 2,
+                title: "Deep Dive into Service Mesh with Istio",
+                excerpt: "Understanding how service meshes work and implementing Istio for advanced traffic management and observability in your cluster.",
+                date: "2025-10-01",
+                readTime: "12 min read",
+                icon: "🔧",
+                tags: ["istio", "service-mesh", "cncf"],
+                url: "#"
+            },
+            {
+                id: 3,
+                title: "CI/CD with ArgoCD and GitOps",
+                excerpt: "Implementing GitOps practices with ArgoCD for declarative, version-controlled Kubernetes deployments.",
+                date: "2025-09-28",
+                readTime: "10 min read",
+                icon: "🚀",
+                tags: ["gitops", "argocd", "ci-cd", "tutorial"],
+                url: "#"
+            },
+            {
+                id: 4,
+                title: "Monitoring K8s with Prometheus & Grafana",
+                excerpt: "Build a complete observability stack for your Kubernetes clusters using Prometheus for metrics and Grafana for visualization.",
+                date: "2025-09-25",
+                readTime: "15 min read",
+                icon: "📊",
+                tags: ["monitoring", "prometheus", "observability"],
+                url: "#"
+            },
+            {
+                id: 5,
+                title: "Kubernetes Security Best Practices",
+                excerpt: "Essential security practices for hardening your Kubernetes clusters, from RBAC to network policies and beyond.",
+                date: "2025-09-20",
+                readTime: "11 min read",
+                icon: "🔐",
+                tags: ["security", "kubernetes", "rbac"],
+                url: "#"
+            },
+            {
+                id: 6,
+                title: "CNCF Landscape: Tools You Should Know",
+                excerpt: "Navigate the vast CNCF landscape and discover essential tools for building modern cloud-native applications.",
+                date: "2025-09-15",
+                readTime: "9 min read",
+                icon: "🌐",
+                tags: ["cncf", "cloud-native", "tutorial"],
+                url: "#"
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const postsPerPage = 6;
+        let filteredPosts = [...blogPosts];
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        function createBlogCard(post) {
+            return `
+                <div class="blog-card" onclick="window.location.href='${post.url}'">
+                    <div class="blog-card-image">${post.icon}</div>
+                    <div class="blog-card-content">
+                        <div class="blog-meta">
+                            <span>📅 ${formatDate(post.date)}</span>
+                            <span>⏱️ ${post.readTime}</span>
+                        </div>
+                        <h3>${post.title}</h3>
+                        <p>${post.excerpt}</p>
+                        <div class="tags">
+                            ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <a href="${post.url}" class="read-more">Read More →</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBlogPosts() {
+            const grid = document.getElementById('blogGrid');
+            const noResults = document.getElementById('noResults');
+            
+            const start = (currentPage - 1) * postsPerPage;
+            const end = start + postsPerPage;
+            const paginatedPosts = filteredPosts.slice(start, end);
+
+            if (paginatedPosts.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                noResults.style.display = 'none';
+                grid.innerHTML = paginatedPosts.map(post => createBlogCard(post)).join('');
+            }
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+            if (totalPages <= 1) {
+                pagination.style.display = 'none';
+                return;
+            }
+
+            pagination.style.display = 'flex';
+            pagination.innerHTML = `
+                <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">← Previous</button>
+                <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+                <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">Next →</button>
+            `;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderBlogPosts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterPosts(filter) {
+            currentFilter = filter;
+            currentPage = 1;
+            
+            if (filter === 'all') {
+                filteredPosts = [...blogPosts];
+            } else {
+                filteredPosts = blogPosts.filter(post => 
+                    post.tags.some(tag => tag.toLowerCase() === filter.toLowerCase())
+                );
+            }
+
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm) {
+                filteredPosts = filteredPosts.filter(post =>
+                    post.title.toLowerCase().includes(searchTerm) ||
+                    post.excerpt.toLowerCase().includes(searchTerm) ||
+                    post.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            renderBlogPosts();
+        }
+
+        function searchPosts(searchTerm) {
+            currentPage = 1;
+            searchTerm = searchTerm.toLowerCase();
+
+            if (currentFilter === 'all') {
+                filteredPosts = [...blogPosts];
+            } else {
+                filteredPosts = blogPosts.filter(post => 
+                    post.tags.some(tag => tag.toLowerCase() === currentFilter.toLowerCase())
+                );
+            }
+
+            if (searchTerm) {
+                filteredPosts = filteredPosts.filter(post =>
+                    post.title.toLowerCase().includes(searchTerm) ||
+                    post.excerpt.toLowerCase().includes(searchTerm) ||
+                    post.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            renderBlogPosts();
+        }
+
+        // Event listeners
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterPosts(this.dataset.filter);
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            searchPosts(e.target.value);
+        });
+
+        // Initial render
+        renderBlogPosts();
+    </script>
 </body>
 </html>

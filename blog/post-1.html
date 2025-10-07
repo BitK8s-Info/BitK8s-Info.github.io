@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Kubernetes 1.30 - BitK8s</title>
+    <meta name="description" content="Explore the latest features and improvements in Kubernetes 1.30">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --k8s-blue: #326CE5;
+            --dark-bg: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --code-bg: #1c2128;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--k8s-blue);
+            text-decoration: none;
+        }
+
+        .logo svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .back-link {
+            max-width: 900px;
+            margin: 2rem auto 0;
+            padding: 0 2rem;
+        }
+
+        .back-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s;
+        }
+
+        .back-link a:hover {
+            transform: translateX(-5px);
+        }
+
+        article {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .article-header {
+            margin-bottom: 3rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-excerpt {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            background: rgba(50, 108, 229, 0.1);
+            color: var(--k8s-blue);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(50, 108, 229, 0.3);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, var(--k8s-blue), #1a3a7a);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            margin-bottom: 3rem;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+        }
+
+        .article-content h2 {
+            font-size: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--k8s-blue);
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #ff6b6b;
+        }
+
+        .article-content pre {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--k8s-blue);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .info-box {
+            background: rgba(50, 108, 229, 0.1);
+            border: 1px solid rgba(50, 108, 229, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-box h4 {
+            color: var(--k8s-blue);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-box {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-box h4 {
+            color: #ff6b6b;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .author-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 4rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--k8s-blue), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .author-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .author-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .author-social a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .related-posts {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .related-posts h2 {
+            margin-bottom: 2rem;
+            color: var(--k8s-blue);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .related-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .related-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--k8s-blue);
+        }
+
+        .related-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .related-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .featured-image {
+                height: 250px;
+                font-size: 5rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+
+            .author-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                BitK8s
+            </a>
+            <nav>
+                <a href="../index.html">Home</a>
+                <a href="../index.html#blog">Blog</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="back-link">
+        <a href="../index.html">← Back to All Posts</a>
+    </div>
+
+    <article>
+        <div class="article-header">
+            <div class="article-meta">
+                <span>📅 October 5, 2025</span>
+                <span>⏱️ 8 min read</span>
+                <span>👤 By BitK8s Team</span>
+            </div>
+            
+            <h1>Getting Started with Kubernetes 1.30</h1>
+            
+            <p class="article-excerpt">
+                Explore the latest features and improvements in Kubernetes 1.30, including enhanced security features, performance optimizations, and new developer tools that make container orchestration easier than ever.
+            </p>
+
+            <div class="tags">
+                <span class="tag">Kubernetes</span>
+                <span class="tag">Tutorial</span>
+                <span class="tag">DevOps</span>
+            </div>
+        </div>
+
+        <div class="featured-image">☸️</div>
+
+        <div class="article-content">
+            <h2>Introduction</h2>
+            <p>
+                Kubernetes 1.30 represents a significant milestone in the evolution of container orchestration. This release brings numerous enhancements that improve security, performance, and developer experience. Whether you're new to Kubernetes or a seasoned operator, understanding these changes will help you make the most of your cluster deployments.
+            </p>
+
+            <div class="info-box">
+                <h4>💡 What's New</h4>
+                <p>Kubernetes 1.30 introduces over 45 enhancements, with 15 graduating to stable status. This release focuses on stability, security, and user experience improvements.</p>
+            </div>
+
+            <h2>Key Features in Kubernetes 1.30</h2>
+
+            <h3>1. Enhanced Security Features</h3>
+            <p>
+                Security has always been paramount in Kubernetes, and version 1.30 takes it to the next level. The new release includes improved Pod Security Standards, enhanced secret management, and better RBAC capabilities.
+            </p>
+
+            <p>Here's an example of the new Pod Security configuration:</p>
+
+            <pre><code>apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted</code></pre>
+
+            <h3>2. Performance Improvements</h3>
+            <p>
+                Kubernetes 1.30 brings significant performance improvements, particularly in large-scale deployments. The API server now handles requests more efficiently, and the scheduler has been optimized for better pod placement decisions.
+            </p>
+
+            <ul>
+                <li><strong>API Server Optimizations:</strong> Reduced latency by up to 30% for read operations</li>
+                <li><strong>Scheduler Enhancements:</strong> Faster pod scheduling with improved algorithm efficiency</li>
+                <li><strong>etcd Performance:</strong> Better handling of large clusters with thousands of nodes</li>
+                <li><strong>Network Stack:</strong> Improved CNI plugin performance and reliability</li>
+            </ul>
+
+            <h3>3. Developer Experience Improvements</h3>
+            <p>
+                The developer experience has been significantly enhanced with better kubectl commands, improved debugging tools, and more intuitive error messages.
+            </p>
+
+            <div class="warning-box">
+                <h4>⚠️ Breaking Changes</h4>
+                <p>Be aware that Kubernetes 1.30 includes some breaking changes, particularly around deprecated API versions. Make sure to review the migration guide before upgrading production clusters.</p>
+            </div>
+
+            <h2>Getting Started</h2>
+
+            <h3>Installation Prerequisites</h3>
+            <p>Before installing Kubernetes 1.30, ensure your environment meets the following requirements:</p>
+
+            <ol>
+                <li>Linux kernel version 4.19 or higher</li>
+                <li>Container runtime (containerd, CRI-O, or Docker)</li>
+                <li>At least 2GB RAM per node</li>
+                <li>Network connectivity between all nodes</li>
+            </ol>
+
+            <h3>Quick Installation with kubeadm</h3>
+            <p>The easiest way to get started with Kubernetes 1.30 is using kubeadm:</p>
+
+            <pre><code># Update package index
+sudo apt-get update
+
+# Install kubeadm, kubelet, and kubectl
+sudo apt-get install -y kubeadm=1.30.0-00 kubelet=1.30.0-00 kubectl=1.30.0-00
+
+# Initialize the cluster
+sudo kubeadm init --kubernetes-version=v1.30.0
+
+# Configure kubectl
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config</code></pre>
+
+            <h2>Best Practices</h2>
+
+            <h3>Resource Management</h3>
+            <p>
+                Proper resource management is crucial for maintaining healthy Kubernetes clusters. Always define resource requests and limits for your containers:
+            </p>
+
+            <pre><code>resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "512Mi"
+    cpu: "1000m"</code></pre>
+
+            <h3>Monitoring and Observability</h3>
+            <p>
+                Kubernetes 1.30 works seamlessly with popular monitoring solutions. We recommend setting up:
+            </p>
+
+            <ul>
+                <li>Prometheus for metrics collection</li>
+                <li>Grafana for visualization</li>
+                <li>Jaeger or Zipkin for distributed tracing</li>
+                <li>ELK or Loki stack for log aggregation</li>
+            </ul>
+
+            <blockquote>
+                "Kubernetes 1.30 represents our commitment to providing a stable, secure, and performant platform for cloud-native applications. The community has done an excellent job delivering features that matter to real-world deployments." - CNCF Technical Oversight Committee
+            </blockquote>
+
+            <h2>Conclusion</h2>
+            <p>
+                Kubernetes 1.30 is a robust release that brings significant improvements across security, performance, and usability. Whether you're running a small development cluster or managing thousands of nodes in production, this release has something to offer.
+            </p>
+
+            <p>
+                As you explore Kubernetes 1.30, remember to follow the official migration guides, test thoroughly in non-production environments, and leverage the vibrant Kubernetes community for support and best practices.
+            </p>
+
+            <div class="info-box">
+                <h4>📚 Further Reading</h4>
+                <p>Check out the official Kubernetes 1.30 release notes and documentation for detailed information about all changes and new features.</p>
+            </div>
+        </div>
+
+        <div class="author-section">
+            <div class="author-avatar">👨‍💻</div>
+            <div class="author-info">
+                <h3>BitK8s Team</h3>
+                <p>Passionate about Kubernetes, cloud-native technologies, and helping developers build better infrastructure. We share insights, tutorials, and best practices from real-world experience.</p>
+                <div class="author-social">
+                    <a href="#">GitHub</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-posts">
+            <h2>Related Posts</h2>
+            <div class="related-grid">
+                <a href="post-2.html" class="related-card">
+                    <h3>Deep Dive into Service Mesh with Istio</h3>
+                    <p>Understanding service mesh architecture and implementation...</p>
+                </a>
+                <a href="post-3.html" class="related-card">
+                    <h3>CI/CD with ArgoCD and GitOps</h3>
+                    <p>Implementing modern deployment practices...</p>
+                </a>
+                <a href="post-5.html" class="related-card">
+                    <h3>Kubernetes Security Best Practices</h3>
+                    <p>Essential security measures for production clusters...</p>
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <p>&copy; 2025 BitK8s.info - All rights reserved</p>
+    </footer>
+</body>
+</html>
